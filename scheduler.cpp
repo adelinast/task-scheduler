@@ -36,6 +36,21 @@ void Scheduler::setN(int n)
 {
 	this->n = n;
 }
+void extractDependencies(char *p, std::vector<std::string> &taskDependenciesList)
+{
+	int count = 0;
+	
+	while (p != NULL )
+	{
+		if (count >= 1)
+		{
+			std::string str(p);
+			taskDependenciesList.push_back(str);
+		}
+		p = strtok(NULL, " \n");
+		count++;
+	}
+}
 
 void Scheduler::readFile()
 {
@@ -57,24 +72,29 @@ void Scheduler::readFile()
 		{
 			int count = 0;
 			char *p = strtok(buf, " ");
-			std::string taskName(p);
+			std::string taskName("");
+			int taskExecutionTime;
+			size_t taskDepNumber;
 			
-			p = strtok(NULL, " ");
-			int taskExecutionTime = atoi(p);
-			
-			p = strtok(NULL, " ");
-			size_t taskDepNumber = atoi(p);
-			
-			while (p != NULL )
+			if (p != NULL)
 			{
-				if (count >= 1)
-				{
-					std::string str(p);
-					taskDependenciesList.push_back(str);
-				}
-				p = strtok(NULL, " \n");
-				count++;
+				taskName.assign(p, strlen(p));
+				printf("task name %s\n", taskName.c_str());
 			}
+			
+			p = strtok(NULL, " ");
+			if (p != NULL)
+			{
+				taskExecutionTime = atoi(p);
+			}
+			
+			p = strtok(NULL, " ");
+			if (p != NULL)
+			{
+				taskDepNumber = atoi(p);
+			}
+			
+			extractDependencies(p, taskDependenciesList);
 
 			Node *node = new Node(taskName, taskExecutionTime, taskDependenciesList);
 			std::pair<std::string, Node*> pair;
