@@ -84,6 +84,6 @@ class Scheduler {
 		std::map<std::string, Node*> nodeMap;
 		std::queue<std::string> nodesNoDependent;
 		std::map<std::string, Node*> sortednodeMap;
-		FILE *inputFile;
+		FILE *inputFile; 
 };
 #endif
