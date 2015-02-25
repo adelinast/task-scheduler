@@ -11,13 +11,6 @@
 
 class Scheduler {
 
-	private:
-		int n;
-		std::map<std::string, Node*> nodeMap;
-		std::queue<std::string> nodesNoDependent;
-		std::map<std::string, Node*> sortednodeMap;
-		FILE *inputFile;
-	
 	public:
 		Scheduler();
 		Scheduler(FILE* inputFile);
@@ -40,7 +33,7 @@ class Scheduler {
 
 		/**
 		 * @brief Topological sort
-		 * @return true if topological sort can be perfomed, false otherwise
+		 * @return true if topological sort can be performed, false otherwise
 		 */
 		bool topologicalSort();
 
@@ -56,13 +49,7 @@ class Scheduler {
 		 */
 		std::map<std::string, Node*> getNodeMap();
 
-		/**
-		 * @brief search what dependencies has the node
-		 * @param node - node for which the search is performed
-		 * @param currentNodeDependency
-		 */
-		void searchDependencyNode(Node *node, std::string currentNodeDependency);
-		
+	
 		/**
 		 * @brief Builds the graph
 		 */
@@ -73,6 +60,17 @@ class Scheduler {
 		 * @return the minim time of scheduling
 		 */
 		int calculateMinTimeScheduling();
+
+	private:
+		
+		void fillNodeData(std::string taskName, int taskExecutionTime, size_t taskDepNumber, std::vector<std::string> taskDependenciesList);
+		
+		/**
+		 * @brief search what dependencies has the node
+		 * @param node - node for which the search is performed
+		 * @param currentNodeDependency
+		 */
+		void searchDependencyNode(Node *node, std::string currentNodeDependency);
 		
 		/**
 		 * @brief Get total distance from source node
@@ -81,5 +79,11 @@ class Scheduler {
 		 * @return total distance from source node
 		 */
 		int getTotalDistanceFromNode(std::map<Node*, int> *distance, Node *sourceNode);
+
+		int n;
+		std::map<std::string, Node*> nodeMap;
+		std::queue<std::string> nodesNoDependent;
+		std::map<std::string, Node*> sortednodeMap;
+		FILE *inputFile;
 };
 #endif
