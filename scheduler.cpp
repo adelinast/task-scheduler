@@ -52,6 +52,30 @@ void extractDependencies(char *p, std::vector<std::string> &taskDependenciesList
 	}
 }
 
+char *extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime, size_t *taskDepNumber) 
+{
+	char *p = strtok(buf, " ");
+
+	if (p != NULL)
+	{
+		taskName.assign(p, strlen(p));
+	}
+			
+	p = strtok(NULL, " ");
+	if (p != NULL)
+	{
+		*taskExecutionTime = atoi(p);
+	}
+			
+	p = strtok(NULL, " ");
+	if (p != NULL)
+	{
+		*taskDepNumber = atoi(p);
+	}
+
+	return p;
+}
+
 void Scheduler::readFile()
 {
 	int line = 0;
@@ -70,29 +94,11 @@ void Scheduler::readFile()
 		}
 		else
 		{
-			int count = 0;
-			char *p = strtok(buf, " ");
-			std::string taskName("");
+			std::string taskName;
 			int taskExecutionTime;
 			size_t taskDepNumber;
 			
-			if (p != NULL)
-			{
-				taskName.assign(p, strlen(p));
-				printf("task name %s\n", taskName.c_str());
-			}
-			
-			p = strtok(NULL, " ");
-			if (p != NULL)
-			{
-				taskExecutionTime = atoi(p);
-			}
-			
-			p = strtok(NULL, " ");
-			if (p != NULL)
-			{
-				taskDepNumber = atoi(p);
-			}
+			char *p = extractTaskInfo(buf, taskName, &taskExecutionTime, &taskDepNumber);
 			
 			extractDependencies(p, taskDependenciesList);
 
