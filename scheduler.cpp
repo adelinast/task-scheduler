@@ -76,6 +76,26 @@ char *extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime,
 	return p;
 }
 
+void Scheduler::fillNodeData(std::string taskName, int taskExecutionTime, size_t taskDepNumber, std::vector<std::string> taskDependenciesList)
+{
+	Node *node = new Node(taskName, taskExecutionTime, taskDependenciesList);
+	
+	std::pair<std::string, Node*> pair;
+	pair.first=node->getName();
+	pair.second = node;
+	nodeMap.insert(pair);
+
+	if (taskDependenciesList.size() != taskDepNumber)
+	{
+		printf("file format error");
+	}
+			
+	if (taskDependenciesList.size() == 0)
+	{
+		nodesNoDependent.push(node->getName());
+	}
+}
+
 void Scheduler::readFile()
 {
 	int line = 0;
@@ -102,21 +122,7 @@ void Scheduler::readFile()
 			
 			extractDependencies(p, taskDependenciesList);
 
-			Node *node = new Node(taskName, taskExecutionTime, taskDependenciesList);
-			std::pair<std::string, Node*> pair;
-			pair.first=node->getName();
-			pair.second = node;
-			nodeMap.insert(pair);
-
-			if (taskDependenciesList.size() != taskDepNumber)
-			{
-				printf("file format error");
-			}
-			
-			if (taskDependenciesList.size() == 0)
-			{
-				nodesNoDependent.push(node->getName());
-			}
+			fillNodeData(taskName, taskExecutionTime, taskDepNumber, taskDependenciesList);
 		}
 	}
 }
