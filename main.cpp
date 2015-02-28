@@ -12,7 +12,7 @@ int main()
 		exit(0);
 	}
 
-	Scheduler scheduler(fin);
+	Scheduler scheduler{fin};
 
 	printf("time %d\n", scheduler.calculateMinTimeScheduling());
 }
