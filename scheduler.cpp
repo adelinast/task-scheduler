@@ -15,7 +15,7 @@
 #include "scheduler.h"
 
 using namespace std;
-const int lineMax=256;
+const int lineMax = 256;
 
 Scheduler::Scheduler()
 {
@@ -24,7 +24,6 @@ Scheduler::Scheduler()
 Scheduler::Scheduler(FILE* inputFile):inputFile(inputFile)
 {
 	n = 0;
-	readFile();
 }
 
 int Scheduler::getN()
@@ -41,7 +40,7 @@ void extractDependencies(char *p, std::vector<std::string> &taskDependenciesList
 {
 	int count = 0;
 	
-	while (p != NULL )
+	while (p != nullptr)
 	{
 		if (count >= 1)
 		{
@@ -49,7 +48,7 @@ void extractDependencies(char *p, std::vector<std::string> &taskDependenciesList
 			taskDependenciesList.push_back(str);
 		}
 		
-		p = strtok(NULL, " \n");
+		p = strtok(nullptr, " \n");
 		count++;
 	}
 }
@@ -58,19 +57,19 @@ char *extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime,
 {
 	char *p = strtok(buf, " ");
 
-	if (p != NULL)
+	if (p != nullptr)
 	{
 		taskName.assign(p, strlen(p));
 	}
 			
-	p = strtok(NULL, " ");
-	if (p != NULL)
+	p = strtok(nullptr, " ");
+	if (p != nullptr)
 	{
 		*taskExecutionTime = atoi(p);
 	}
 			
-	p = strtok(NULL, " ");
-	if (p != NULL)
+	p = strtok(nullptr, " ");
+	if (p != nullptr)
 	{
 		*taskDepNumber = atoi(p);
 	}
@@ -78,7 +77,7 @@ char *extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime,
 	return p;
 }
 
-void Scheduler::fillNodeData(std::string taskName, int taskExecutionTime, size_t taskDepNumber, std::vector<std::string> taskDependenciesList)
+int Scheduler::fillNodeData(std::string taskName, int taskExecutionTime, size_t taskDepNumber, std::vector<std::string> taskDependenciesList)
 {
 	auto *node = new Node(taskName, taskExecutionTime, taskDependenciesList);
 	
@@ -89,18 +88,22 @@ void Scheduler::fillNodeData(std::string taskName, int taskExecutionTime, size_t
 
 	if (taskDependenciesList.size() != taskDepNumber)
 	{
-		printf("file format error");
+		printf("File format error: the number of dependencies is incorrect\n");
+		return -1;
 	}
 			
 	if (taskDependenciesList.size() == 0)
 	{
 		nodesNoDependent.push(node->getName());
 	}
+
+	return 0;
 }
 
-void Scheduler::readFile()
+int Scheduler::readFile()
 {
 	int line = 0;
+	int rc = 0;
 
 	while (!feof(this->inputFile))
 	{
@@ -116,17 +119,30 @@ void Scheduler::readFile()
 		}
 		else
 		{
-			std::string taskName;
-			int taskExecutionTime;
-			size_t taskDepNumber;
+			std::string taskName("");
+			int taskExecutionTime = 0;
+			size_t taskDepNumber = 0;
 			
-			char *p = extractTaskInfo(buf, taskName, &taskExecutionTime, &taskDepNumber);
-			
-			extractDependencies(p, taskDependenciesList);
+			char *taskInfo = nullptr;
+			taskInfo = extractTaskInfo(buf, taskName, &taskExecutionTime, &taskDepNumber);
 
-			fillNodeData(taskName, taskExecutionTime, taskDepNumber, taskDependenciesList);
+			if (taskInfo != nullptr)
+			{
+				if (taskName.compare("") == 0 || taskExecutionTime == 0)
+				{
+					printf("File format error, one of the fields is missing\n");
+					rc = -1;
+					break;
+				}
+
+				extractDependencies(taskInfo, taskDependenciesList);
+			}
+			
+			rc = fillNodeData(taskName, taskExecutionTime, taskDepNumber, taskDependenciesList);
 		}
 	}
+
+	return rc;
 }
 
 void topSortUtil(Node *node, std::queue<std::string> *nodesNoDependent)
@@ -241,7 +257,7 @@ int Scheduler::getTotalDistanceFromNode(std::map<Node*, int> *distance, Node *so
 	int maxDistance = 0;
 	int totalDistanceSourceNode = 0;
 
-	for (auto it = begin(sourceNode->outEdges) ; it !=end(sourceNode->outEdges); ++it)
+	for (auto it = begin(sourceNode->outEdges) ; it != end(sourceNode->outEdges); ++it)
 	{
 		Edge *edge = *it;
 		Node *nodeNeighBour = edge->to;
