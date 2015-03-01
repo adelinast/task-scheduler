@@ -13,12 +13,13 @@ class Scheduler {
 
 	public:
 		Scheduler();
+		
 		Scheduler(FILE* inputFile);
 
 		/**
 		 * @brief Read file
 		 */
-		void readFile();
+		int readFile();
 
 		/**
 		 * @brief Set number of tasks
@@ -63,7 +64,7 @@ class Scheduler {
 
 	private:
 		
-		void fillNodeData(std::string taskName, int taskExecutionTime, size_t taskDepNumber, std::vector<std::string> taskDependenciesList);
+		int fillNodeData(std::string taskName, int taskExecutionTime, size_t taskDepNumber, std::vector<std::string> taskDependenciesList);
 		
 		/**
 		 * @brief search what dependencies has the node
@@ -84,6 +85,6 @@ class Scheduler {
 		std::map<std::string, Node*> nodeMap;
 		std::queue<std::string> nodesNoDependent;
 		std::map<std::string, Node*> sortednodeMap;
-		FILE *inputFile; 
+		FILE *inputFile;
 };
 #endif
