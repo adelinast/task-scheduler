@@ -96,9 +96,13 @@ class Scheduler {
 		int getTotalDistanceFromNode(std::map<Node*, int> *distance, Node *sourceNode);
 
 		int n;
+
 		std::map<std::string, Node*> nodeMap;
-		std::queue<std::string> nodesNoDependent;
+
+		std::queue<std::string> nodesNoDependency;
+
 		std::map<std::string, Node*> sortednodeMap;
+
 		FILE *inputFile;
 };
 #endif

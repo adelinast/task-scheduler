@@ -123,7 +123,7 @@ void Scheduler::addNodeWithNoDep(std::string taskName, std::vector<std::string> 
 {
 	if (taskDependenciesList.size() == 0)
 	{
-		nodesNoDependent.push(taskName);
+		nodesNoDependency.push(taskName);
 	}
 }
 
@@ -173,7 +173,7 @@ int Scheduler::readFile()
 	return rc;
 }
 
-void topSortUtil(Node *node, std::queue<std::string> *nodesNoDependent)
+void topSortUtil(Node *node, std::queue<std::string> *nodesNoDependency)
 {
 	// for each node m with an edge e from node to m do
 	auto it = node->outEdges.begin();
@@ -192,18 +192,18 @@ void topSortUtil(Node *node, std::queue<std::string> *nodesNoDependent)
 		//if m has no other incoming edges then insert m into S
 		if (m->inEdges.empty())
 		{
-			(*nodesNoDependent).push(m->getName());
+			(*nodesNoDependency).push(m->getName());
 		}
 	}
 }
 
 bool Scheduler::topologicalSort()
 {
-	while (!nodesNoDependent.empty())
+	while (!nodesNoDependency.empty())
 	{
 		// remove a node
-		std::string nodeName = nodesNoDependent.front();
-		nodesNoDependent.pop();
+		std::string nodeName = nodesNoDependency.front();
+		nodesNoDependency.pop();
 
 		auto it = this->nodeMap.find(nodeName);
 
@@ -211,7 +211,7 @@ bool Scheduler::topologicalSort()
 
 		sortednodeMap.insert(std::pair<std::string, Node*>(nodeName, node));
 
-		topSortUtil(node, &nodesNoDependent);
+		topSortUtil(node, &nodesNoDependency);
 	}
 
 	//Check to see if all edges are removed
