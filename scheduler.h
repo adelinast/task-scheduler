@@ -16,6 +16,8 @@ class Scheduler {
 		
 		Scheduler(FILE* inputFile);
 
+		~Scheduler();
+
 		/**
 		 * @brief Read file
 		 */
