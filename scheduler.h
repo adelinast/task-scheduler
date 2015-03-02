@@ -58,18 +58,32 @@ class Scheduler {
 		
 		/**
 		 * @brief Calculate the minimum time of scheduling
-		 * @return the minim time of scheduling
+		 * @return the minimum time of scheduling
 		 */
 		int calculateMinTimeScheduling();
 
 	private:
-		
-		int fillNodeData(std::string taskName, int taskExecutionTime, size_t taskDepNumber, std::vector<std::string> taskDependenciesList);
+
+		/**
+		 * @brief Add a node to nodeMap
+		 * @param taskName - name of the task
+		 * @param taskExecutionTime - the time needed to run the task
+		 * @param taskDepNumber - the number of dependencies
+		 * @param taskDependenciesList - the list of task dependencies
+		 */
+		int addNode(std::string taskName, int taskExecutionTime, size_t taskDepNumber, std::vector<std::string> taskDependenciesList);
+
+		/**
+		 * @brief Add a node with no dependencies to nodeSet
+		 * @param taskName - name of the task
+		 * @param taskDependenciesList - the list of task dependencies
+		 */
+		void addNodeWithNoDep(std::string taskName, std::vector<std::string> taskDependenciesList);
 		
 		/**
 		 * @brief search what dependencies has the node
 		 * @param node - node for which the search is performed
-		 * @param currentNodeDependency
+		 * @param currentNodeDependency - the current node name
 		 */
 		void searchDependencyNode(Node *node, std::string currentNodeDependency);
 		

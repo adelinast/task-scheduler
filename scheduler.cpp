@@ -101,9 +101,9 @@ int extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime, s
 	return rc;
 }
 
-int Scheduler::fillNodeData(std::string taskName, int taskExecutionTime, size_t taskDepNumber, std::vector<std::string> taskDependenciesList)
+int Scheduler::addNode(std::string taskName, int taskExecutionTime, size_t taskDepNumber, std::vector<std::string> taskDependenciesList)
 {
-	auto *node = new Node(taskName, taskExecutionTime, taskDependenciesList);
+	Node *node = new Node(taskName, taskExecutionTime, taskDependenciesList);
 	
 	std::pair<std::string, Node*> pair;
 	pair.first = node->getName();
@@ -115,13 +115,16 @@ int Scheduler::fillNodeData(std::string taskName, int taskExecutionTime, size_t 
 		printf("Error: Input File has wrong format, the number of dependencies is incorrect\n");
 		return -1;
 	}
-			
-	if (taskDependenciesList.size() == 0)
-	{
-		nodesNoDependent.push(node->getName());
-	}
 
 	return 0;
+}
+
+void Scheduler::addNodeWithNoDep(std::string taskName, std::vector<std::string> taskDependenciesList)
+{
+	if (taskDependenciesList.size() == 0)
+	{
+		nodesNoDependent.push(taskName);
+	}
 }
 
 int Scheduler::readFile()
@@ -156,8 +159,14 @@ int Scheduler::readFile()
 			if (taskInfo != nullptr && rc == 0)
 			{
 				extractDependencies(taskInfo, taskDependenciesList);
-				rc = fillNodeData(taskName, taskExecutionTime, taskDepNumber, taskDependenciesList);
+				rc = addNode(taskName, taskExecutionTime, taskDepNumber, taskDependenciesList);
 			}
+
+			if (rc == 0)
+			{
+				addNodeWithNoDep(taskName, taskDependenciesList);
+			}
+
 		}
 	}
 
