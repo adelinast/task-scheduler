@@ -23,6 +23,8 @@ TEST(Scheduler, readFile)
 	}
 
 	Scheduler scheduler(fin);
+
+	EXPECT_EQ(0, scheduler.readFile());
 	
 	std::map<std::string, Node*> nodeMap = scheduler.getNodeMap();
 
@@ -71,6 +73,8 @@ TEST(Scheduler, buildGraph)
 
 	Scheduler scheduler(f);
 	
+	EXPECT_EQ(0, scheduler.readFile());
+
 	scheduler.buildGraph();
 
 	std::map<std::string, Node*> nodeMap = scheduler.getNodeMap();
@@ -139,6 +143,8 @@ TEST(Scheduler, topologicalSort)
 
 	Scheduler scheduler(f);
 
+	EXPECT_EQ(0, scheduler.readFile());
+
 	scheduler.buildGraph();
 	
 	EXPECT_TRUE(scheduler.topologicalSort());
@@ -175,6 +181,8 @@ TEST(Scheduler, calculateMinTimeScheduling)
 	}
 
 	Scheduler scheduler(f);
+
+	EXPECT_EQ(0, scheduler.readFile());
 	
 	EXPECT_EQ(12, scheduler.calculateMinTimeScheduling());
 
