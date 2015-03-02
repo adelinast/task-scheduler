@@ -28,6 +28,11 @@ Scheduler::Scheduler(FILE* inputFile):inputFile(inputFile)
 
 Scheduler::~Scheduler()
 {
+	for (auto &entry : nodeMap)
+	{
+		Node * node = entry.second;
+		delete node;
+	}
 }
 
 int Scheduler::getN()
