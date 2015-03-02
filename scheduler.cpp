@@ -53,28 +53,52 @@ void extractDependencies(char *p, std::vector<std::string> &taskDependenciesList
 	}
 }
 
-char *extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime, size_t *taskDepNumber) 
+int extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime, size_t *taskDepNumber, char **current)
 {
+	int rc = 0;
 	char *p = strtok(buf, " ");
 
 	if (p != nullptr)
 	{
 		taskName.assign(p, strlen(p));
 	}
-			
-	p = strtok(nullptr, " ");
-	if (p != nullptr)
+	else
 	{
-		*taskExecutionTime = atoi(p);
-	}
-			
-	p = strtok(nullptr, " ");
-	if (p != nullptr)
-	{
-		*taskDepNumber = atoi(p);
+		printf("Error: Input file has wrong format, one of the fields is missing\n");
+		rc = -1;
 	}
 
-	return p;
+	if (rc == 0)
+	{
+		p = strtok(nullptr, " ");
+		if (p != nullptr)
+		{
+			*taskExecutionTime = atoi(p);
+		}
+		else
+		{
+			printf("Error: Input file has wrong format, one of the fields is missing\n");
+			rc = -1;
+		}
+	}
+
+	if (rc == 0)
+	{
+		p = strtok(nullptr, " ");
+		if (p != nullptr)
+		{
+			*taskDepNumber = atoi(p);
+		}
+		else
+		{
+			printf("Error: Input file has wrong format, task dep number is missing\n");
+			rc = -1;
+		}
+	}
+
+	*current = p;
+
+	return rc;
 }
 
 int Scheduler::fillNodeData(std::string taskName, int taskExecutionTime, size_t taskDepNumber, std::vector<std::string> taskDependenciesList)
@@ -88,7 +112,7 @@ int Scheduler::fillNodeData(std::string taskName, int taskExecutionTime, size_t 
 
 	if (taskDependenciesList.size() != taskDepNumber)
 	{
-		printf("File format error: the number of dependencies is incorrect\n");
+		printf("Error: Input File has wrong format, the number of dependencies is incorrect\n");
 		return -1;
 	}
 			
@@ -105,13 +129,16 @@ int Scheduler::readFile()
 	int line = 0;
 	int rc = 0;
 
-	while (!feof(this->inputFile))
+	while (!feof(this->inputFile) && (rc == 0))
 	{
 		std::vector<std::string> taskDependenciesList;
 		char buf[lineMax] = {0};
 		line++;
 
-		fgets(buf, sizeof buf, this->inputFile);
+		if (fgets(buf, sizeof buf, this->inputFile) == NULL)
+		{
+			break;
+		}
 
 		if (line == 1)
 		{
@@ -119,26 +146,18 @@ int Scheduler::readFile()
 		}
 		else
 		{
-			std::string taskName("");
+			std::string taskName;
 			int taskExecutionTime = 0;
 			size_t taskDepNumber = 0;
 			
 			char *taskInfo = nullptr;
-			taskInfo = extractTaskInfo(buf, taskName, &taskExecutionTime, &taskDepNumber);
+			rc = extractTaskInfo(buf, taskName, &taskExecutionTime, &taskDepNumber, &taskInfo);
 
-			if (taskInfo != nullptr)
+			if (taskInfo != nullptr && rc == 0)
 			{
-				if (taskName.compare("") == 0 || taskExecutionTime == 0)
-				{
-					printf("File format error, one of the fields is missing\n");
-					rc = -1;
-					break;
-				}
-
 				extractDependencies(taskInfo, taskDependenciesList);
+				rc = fillNodeData(taskName, taskExecutionTime, taskDepNumber, taskDependenciesList);
 			}
-			
-			rc = fillNodeData(taskName, taskExecutionTime, taskDepNumber, taskDependenciesList);
 		}
 	}
 
@@ -201,7 +220,7 @@ bool Scheduler::topologicalSort()
 
 	if (cycle)
 	{
-		printf("Cycle present, topological sort not possible");
+		printf("Error: Cycle present, topological sort not possible");
 		return false;
 	}
 
