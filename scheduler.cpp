@@ -15,7 +15,7 @@
 #include "scheduler.h"
 
 using namespace std;
-const int lineMax = 256;
+const int lineMax = 8096;
 
 Scheduler::Scheduler()
 {
@@ -51,13 +51,15 @@ void extractDependencies(char *p, std::vector<std::string> &taskDependenciesList
 	
 	while (p != nullptr)
 	{
+
 		if (count >= 1)
 		{
 			std::string str(p);
 			taskDependenciesList.push_back(str);
+
 		}
-		
 		p = strtok(nullptr, " \n");
+
 		count++;
 	}
 }
@@ -112,18 +114,18 @@ int extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime, s
 
 int Scheduler::addNode(std::string taskName, int taskExecutionTime, size_t taskDepNumber, std::vector<std::string> taskDependenciesList)
 {
+	if (taskDependenciesList.size() != taskDepNumber)
+	{
+		printf("Error: Input File has wrong format, the number of dependencies is incorrect %d %d\n", taskDependenciesList.size(), taskDepNumber);
+		return -1;
+	}
+	
 	Node *node = new Node(taskName, taskExecutionTime, taskDependenciesList);
 	
 	std::pair<std::string, Node*> pair;
 	pair.first = node->getName();
 	pair.second = node;
 	nodeMap.insert(pair);
-
-	if (taskDependenciesList.size() != taskDepNumber)
-	{
-		printf("Error: Input File has wrong format, the number of dependencies is incorrect\n");
-		return -1;
-	}
 
 	return 0;
 }
