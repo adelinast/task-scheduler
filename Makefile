@@ -12,7 +12,7 @@ all:
 	$(CXX) $(CXXFLAGS) -o main scheduler.o node.o main.o -std=c++11
 
 test:
-	$(CXX) $(TEST_INCLUDES) $(TEST_LINK_FLAGS) test_scheduler.cpp -o test $(TEST_LINK_LIBS) scheduler.o node.o
+	$(CXX) $(TEST_INCLUDES) $(TEST_LINK_FLAGS) test_scheduler.cpp -o test $(TEST_LINK_LIBS) scheduler.o node.o -std=c++11
 
 clean:
 	if [ -f "*.o" ]; then rm -f *.o;fi
