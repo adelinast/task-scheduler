@@ -5,9 +5,10 @@
 #include <iostream>
 #include "edge.h"
 #include "node.h"
-#include<map>
-#include<set>
-#include<queue>
+#include <map>
+#include <set>
+#include <queue>
+#include <unordered_map>
 
 class Scheduler {
 
@@ -41,16 +42,16 @@ class Scheduler {
 		bool topologicalSort();
 
 		/**
-		 * @brief Get sorted node list determined by topological sort
-		 * @return sorted node list
+		 * @brief Get sorted node map determined by topological sort
+		 * @return sorted node map
 		 */
 		std::map<std::string, Node*> getSortedList();
 
 		/**
-		 * @brief Get node list
-		 * @return node list
+		 * @brief Get node map
+		 * @return node map
 		 */
-		std::map<std::string, Node*> getNodeMap();
+		std::unordered_map<std::string, Node*> getNodeMap();
 
 	
 		/**
@@ -99,7 +100,7 @@ class Scheduler {
 
 		int n;
 
-		std::map<std::string, Node*> nodeMap;
+		std::unordered_map<std::string, Node*> nodeMap;
 
 		std::queue<std::string> nodesNoDependency;
 

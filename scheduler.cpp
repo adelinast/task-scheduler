@@ -273,7 +273,7 @@ std::map<std::string, Node*> Scheduler::getSortedList()
 	return sortednodeMap;
 }
 
-std::map<std::string, Node*> Scheduler::getNodeMap()
+std::unordered_map<std::string, Node*> Scheduler::getNodeMap()
 {
 	return nodeMap;
 }
