@@ -1,6 +1,9 @@
 #include "gtest/gtest.h"
 
 #include "scheduler.h"
+#include <memory>
+#include <time.h>
+using namespace std;
 
 TEST(Scheduler, setGetN)
 {
@@ -85,9 +88,9 @@ TEST(Scheduler, buildGraph)
 		
 		if (node->getName().compare("task1"))
 		{
-			for (std::list<Edge*>::iterator it=node->inEdges.begin(); it!=node->inEdges.end(); ++it)
+			for (auto it=node->inEdges.begin(); it!=node->inEdges.end(); ++it)
 			{
-				Edge* edge = *it;
+				shared_ptr<Edge> edge = (shared_ptr<Edge>)*it;
 				switch(count)
 				{
 					case 0:
@@ -104,18 +107,18 @@ TEST(Scheduler, buildGraph)
 		}
 		else if (node->getName().compare("task2"))
 		{
-			for (std::list<Edge*>::iterator it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
+			for (auto it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
 			{
-				Edge* edge = *it;
+				shared_ptr<Edge> edge = (shared_ptr<Edge>)*it;
 				EXPECT_STREQ(edge->from->getName().c_str(), "task2");
 				EXPECT_STREQ(edge->to->getName().c_str(), "task1");
 			}
 		}
 		else if (node->getName().compare("task3"))
 		{
-			for (std::list<Edge*>::iterator it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
+			for (auto it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
 			{
-				Edge* edge = *it;
+				shared_ptr<Edge> edge = (shared_ptr<Edge>)*it;
 				EXPECT_STREQ(edge->from->getName().c_str(), "task3");
 				EXPECT_STREQ(edge->to->getName().c_str(), "task1");
 			}
@@ -187,6 +190,36 @@ TEST(Scheduler, calculateMinTimeScheduling)
 	EXPECT_EQ(12, scheduler.calculateMinTimeScheduling());
 
 	fclose(f);
+}
+
+TEST(Scheduler, calculateMinTimeSchedulingPerformance)
+{
+	clock_t t_begin, t_end;
+    
+	t_begin = clock();
+    
+	FILE *f = NULL;
+	f = fopen("schedule1000.in", "r");
+	if (f == NULL)
+	{
+		printf("File not found\n");
+		exit(0);
+	}
+
+	Scheduler scheduler(f);
+
+	EXPECT_EQ(0, scheduler.readFile());
+	
+	EXPECT_EQ(668, scheduler.calculateMinTimeScheduling());
+
+	fclose(f);
+	
+    t_end = clock();
+    	
+	double elapsed_secs = double(t_end - t_begin) / CLOCKS_PER_SEC;
+	cout<<elapsed_secs<<endl;
+
+	EXPECT_LT(elapsed_secs, 0.4); 
 }
 
 int main(int argc, char **argv)
