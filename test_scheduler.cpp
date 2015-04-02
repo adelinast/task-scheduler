@@ -18,7 +18,7 @@ TEST(Scheduler, readFile)
 {
 	FILE *fin = NULL;
 	int count = 0;
-	fin = fopen("scheduler.in", "r+");
+	fin = fopen("testinput1.in", "r+");
 	if (fin == NULL)
 	{
 		printf("File not found\n");
@@ -67,7 +67,7 @@ TEST(Scheduler, buildGraph)
 	FILE *f = NULL;
 	int count = 0;	
 	
-	f = fopen("scheduler.in", "r+");
+	f = fopen("testinput1.in", "r+");
 	if (f == NULL)
 	{
 		printf("File not found\n");
@@ -137,7 +137,7 @@ TEST(Scheduler, topologicalSort)
 	FILE *f = NULL;
 	int count = 0;	
 	
-	f = fopen("scheduler.in", "r+");
+	f = fopen("testinput1.in", "r+");
 	if (f == NULL)
 	{
 		printf("File not found\n");
@@ -176,7 +176,8 @@ TEST(Scheduler, topologicalSort)
 TEST(Scheduler, calculateMinTimeScheduling)
 {
 	FILE *f = NULL;
-	f = fopen("scheduler.in", "r+");
+
+	f = fopen("testinput1.in", "r+");
 	if (f == NULL)
 	{
 		printf("File not found\n");
@@ -199,7 +200,7 @@ TEST(Scheduler, calculateMinTimeSchedulingPerformance)
 	t_begin = clock();
     
 	FILE *f = NULL;
-	f = fopen("schedule1000.in", "r");
+	f = fopen("testinput1000.in", "r");
 	if (f == NULL)
 	{
 		printf("File not found\n");
