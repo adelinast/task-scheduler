@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 		exit(1);
 	}
 
-	Scheduler scheduler{fin};
+	Scheduler scheduler(fin);
 
 	rc  = scheduler.readFile();
 
