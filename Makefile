@@ -16,5 +16,5 @@ test:
 
 clean:
 	if [ -f "*.o" ]; then rm -f *.o;fi
-	if [ -a main ]; then rm -f main; fi;
-	if [ -a test ]; then rm -f test; fi;
+	if [ -e main ]; then rm -f main; fi;
+	if [ -e test ]; then rm -f test; fi;
