@@ -69,7 +69,7 @@ int extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime, s
 	int rc = 0;
 	char *p = strtok(buf, " ");
 
-	if (p != nullptr)
+	if (p != NULL)
 	{
 		taskName.assign(p, strlen(p));
 	}
@@ -81,8 +81,8 @@ int extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime, s
 
 	if (rc == 0)
 	{
-		p = strtok(nullptr, " ");
-		if (p != nullptr)
+		p = strtok(NULL, " ");
+		if (p != NULL)
 		{
 			*taskExecutionTime = atoi(p);
 		}
@@ -95,8 +95,8 @@ int extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime, s
 
 	if (rc == 0)
 	{
-		p = strtok(nullptr, " ");
-		if (p != nullptr)
+		p = strtok(NULL, " ");
+		if (p != NULL)
 		{
 			*taskDepNumber = atoi(p);
 		}
