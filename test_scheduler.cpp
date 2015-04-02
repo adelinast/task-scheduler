@@ -1,14 +1,16 @@
 #include "gtest/gtest.h"
 
 #include "scheduler.h"
+
 #include <memory>
 #include <time.h>
+
 using namespace std;
 
 TEST(Scheduler, setGetN)
 {
 	Scheduler scheduler;
-	
+
 	scheduler.setN(10);
 
 	EXPECT_EQ(10, scheduler.getN());
@@ -18,7 +20,7 @@ TEST(Scheduler, readFile)
 {
 	FILE *fin = NULL;
 	int count = 0;
-	fin = fopen("testinput1.in", "r+");
+	fin = fopen("testinput1.in", "r");
 	if (fin == NULL)
 	{
 		printf("File not found\n");
@@ -28,7 +30,7 @@ TEST(Scheduler, readFile)
 	Scheduler scheduler(fin);
 
 	EXPECT_EQ(0, scheduler.readFile());
-	
+
 	std::map<std::string, Node*> nodeMap = scheduler.getNodeMap();
 
 	for (std::map<std::string, Node*>::iterator it=nodeMap.begin(); it!=nodeMap.end(); ++it)
@@ -37,7 +39,7 @@ TEST(Scheduler, readFile)
 		{
 			case 0:
 				EXPECT_STREQ(it->first.c_str(), "task1");
-				EXPECT_STREQ( it->second->getName().c_str(), "task1");
+				EXPECT_STREQ(it->second->getName().c_str(), "task1");
 				EXPECT_EQ(it->second->getExecutionTime(), 7);
 				EXPECT_EQ(it->second->getDependenciesNumber(), 2);
 				EXPECT_STREQ(it->second->getDependencies()[0].c_str(), "task2");
@@ -67,7 +69,7 @@ TEST(Scheduler, buildGraph)
 	FILE *f = NULL;
 	int count = 0;	
 	
-	f = fopen("testinput1.in", "r+");
+	f = fopen("testinput1.in", "r");
 	if (f == NULL)
 	{
 		printf("File not found\n");
@@ -88,9 +90,10 @@ TEST(Scheduler, buildGraph)
 		
 		if (node->getName().compare("task1"))
 		{
-			for (auto it=node->inEdges.begin(); it!=node->inEdges.end(); ++it)
+			for (std::list<Edge*>::iterator it=node->inEdges.begin(); it!=node->inEdges.end(); ++it)
 			{
-				shared_ptr<Edge> edge = (shared_ptr<Edge>)*it;
+				Edge *edge = (Edge*)*it;
+				ASSERT_EQ(edge, nullptr);
 				switch(count)
 				{
 					case 0:
@@ -107,18 +110,20 @@ TEST(Scheduler, buildGraph)
 		}
 		else if (node->getName().compare("task2"))
 		{
-			for (auto it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
+			for (std::list<Edge*>::iterator it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
 			{
-				shared_ptr<Edge> edge = (shared_ptr<Edge>)*it;
+				Edge *edge = (Edge*)*it;
+				ASSERT_EQ(edge, nullptr);
 				EXPECT_STREQ(edge->from->getName().c_str(), "task2");
 				EXPECT_STREQ(edge->to->getName().c_str(), "task1");
 			}
 		}
 		else if (node->getName().compare("task3"))
 		{
-			for (auto it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
+			for (std::list<Edge*>::iterator it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
 			{
-				shared_ptr<Edge> edge = (shared_ptr<Edge>)*it;
+				Edge *edge = (Edge*)*it;
+				ASSERT_EQ(edge, nullptr);
 				EXPECT_STREQ(edge->from->getName().c_str(), "task3");
 				EXPECT_STREQ(edge->to->getName().c_str(), "task1");
 			}
@@ -130,6 +135,7 @@ TEST(Scheduler, buildGraph)
 			EXPECT_STREQ(node->getDependencies()[1].c_str(), "task3");
 		}
 	}
+	fclose(f);
 }
 
 TEST(Scheduler, topologicalSort)
@@ -137,7 +143,7 @@ TEST(Scheduler, topologicalSort)
 	FILE *f = NULL;
 	int count = 0;	
 	
-	f = fopen("testinput1.in", "r+");
+	f = fopen("testinput1.in", "r");
 	if (f == NULL)
 	{
 		printf("File not found\n");
@@ -177,7 +183,7 @@ TEST(Scheduler, calculateMinTimeScheduling)
 {
 	FILE *f = NULL;
 
-	f = fopen("testinput1.in", "r+");
+	f = fopen("testinput1.in", "r");
 	if (f == NULL)
 	{
 		printf("File not found\n");

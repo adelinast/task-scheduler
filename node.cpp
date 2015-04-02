@@ -18,9 +18,11 @@ Node::~Node()
 
 Node* Node::addEdge(Node *node)
 {
-	auto edge = std::make_shared<Edge>(this, node);
+	Edge *edge = new Edge(this, node);
+
 	this->outEdges.push_back(edge);
 	node->inEdges.push_back(edge);
+
 	return this;
 }
 

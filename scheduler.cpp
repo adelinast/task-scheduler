@@ -28,9 +28,9 @@ Scheduler::Scheduler(FILE* inputFile):inputFile(inputFile)
 
 Scheduler::~Scheduler()
 {
-	for (auto &entry : nodeMap)
+	for (std::map<std::string, Node*>::iterator it=nodeMap.begin(); it!=nodeMap.end(); ++it)
 	{
-		Node * node = entry.second;
+		Node * node = it->second;
 		delete node;
 	}
 }
@@ -56,8 +56,8 @@ void extractDependencies(char *p, std::vector<std::string> &taskDependenciesList
 		{
 			std::string str(p);
 			taskDependenciesList.push_back(str);
-
 		}
+
 		p = strtok(NULL, " \n");
 
 		count++;
@@ -191,7 +191,7 @@ void topSortUtil(Node *node, std::queue<std::string> *nodesNoDependency)
 	while (it != node->outEdges.end())
 	{
 		// remove edge e from the graph
-		shared_ptr<Edge> e = (shared_ptr<Edge>)*it;
+		Edge *e = (Edge*)*it;
 		Node *m = e->to;
 
 		// remove edge from node
@@ -216,7 +216,7 @@ bool Scheduler::topologicalSort()
 		std::string nodeName = nodesNoDependency.front();
 		nodesNoDependency.pop();
 
-		auto it = this->nodeMap.find(nodeName);
+		std::map<std::string, Node*>::iterator it = this->nodeMap.find(nodeName);
 
 		Node *node=it->second;
 
@@ -228,9 +228,9 @@ bool Scheduler::topologicalSort()
 	//Check to see if all edges are removed
 	bool cycle = false;
 
-	for (auto &entry : nodeMap)
+	for (std::map<std::string, Node*>::iterator it=this->nodeMap.begin(); it!=this->nodeMap.end(); ++it)
 	{
-		Node * node = entry.second;
+		Node * node = it->second;
 		if (!node->inEdges.empty())
 		{
 			cycle = true;
@@ -247,22 +247,23 @@ bool Scheduler::topologicalSort()
 	return true;
 }
 
-
 void Scheduler::searchDependencyNode(Node *node, std::string nodeName)
 {
-	auto it = this->nodeMap.find(nodeName);
+	std::map<std::string, Node*>::iterator it = this->nodeMap.find(nodeName);
 	it->second->addEdge(node);
 }
 
 void Scheduler::buildGraph()
 {
-	for (auto &entry : nodeMap)
+	for (std::map<std::string, Node*>::iterator it=this->nodeMap.begin(); it!=this->nodeMap.end(); ++it)
 	{
-		Node *node = entry.second;
-		auto nodeDependencies = node->getDependencies();
+        Node *node = (Node*)it->second;
+		std::vector<std::string> nodeDependencies = node->getDependencies();
+		int nodeDependencyListSize = nodeDependencies.size();
 		
-		for (std::string currentNodeDependency : nodeDependencies)
+		for (int i = 0; i < nodeDependencyListSize ; i++)
 		{
+			std::string currentNodeDependency = nodeDependencies[i];
 			searchDependencyNode(node, currentNodeDependency);
 		}
 	}
@@ -280,7 +281,8 @@ std::map<std::string, Node*> Scheduler::getNodeMap()
 
 int getCorrespondingDistance(std::map<Node*, int> distance, Node *node)
 {
-	auto it = distance.find(node);
+    std::map<Node*, int>::iterator it = distance.find(node);
+
 	int distanceNodeNeighBour = -1;
 
 	if (it != distance.end())
@@ -296,9 +298,9 @@ int Scheduler::getTotalDistanceFromNode(std::map<Node*, int> *distance, Node *so
 	int maxDistance = 0;
 	int totalDistanceSourceNode = 0;
 
-	for (auto it = begin(sourceNode->outEdges) ; it != end(sourceNode->outEdges); ++it)
+    for (std::list<Edge*>::iterator it = sourceNode->outEdges.begin() ; it != sourceNode->outEdges.end(); ++it)
 	{
-		shared_ptr<Edge> edge = *it;
+		Edge* edge = *it;
 		Node *nodeNeighBour = edge->to;
 		int distanceNodeNeighBour = getCorrespondingDistance(*distance, nodeNeighBour);
 
@@ -333,14 +335,14 @@ int Scheduler::calculateMinTimeScheduling()
 	// rebuild graph, edges were removed during topological sort
 	buildGraph();
 
-	for (auto &entry : sortednodeMap)
+	for (std::map<std::string, Node*>::iterator it=sortednodeMap.begin(); it!=sortednodeMap.end(); ++it)
 	{
-		distance.insert(std::pair<Node*, int>(entry.second, INT_MIN));
+		distance.insert(std::pair<Node*, int>(it->second, INT_MIN));
 	}
 
-	for (auto &entry : sortednodeMap)
+    for (std::map<std::string, Node*>::iterator it=sortednodeMap.begin(); it!=sortednodeMap.end(); ++it)
 	{
-		Node *node = entry.second;
+		Node *node = it->second;
 		if (distance.at(node) == INT_MIN)
 		{
 			maxDistance = std::max(maxDistance, getTotalDistanceFromNode(&distance, node));
