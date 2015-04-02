@@ -343,7 +343,7 @@ int Scheduler::calculateMinTimeScheduling()
     for (std::map<std::string, Node*>::iterator it=sortednodeMap.begin(); it!=sortednodeMap.end(); ++it)
 	{
 		Node *node = it->second;
-		if (distance.at(node) == INT_MIN)
+		if (distance[node] == INT_MIN)
 		{
 			maxDistance = std::max(maxDistance, getTotalDistanceFromNode(&distance, node));
 		}
