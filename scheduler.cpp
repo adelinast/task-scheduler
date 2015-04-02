@@ -216,7 +216,7 @@ bool Scheduler::topologicalSort()
 		std::string nodeName = nodesNoDependency.front();
 		nodesNoDependency.pop();
 
-		std::map<std::string, Node*>::iterator it = this->nodeMap.find(nodeName);
+		auto it = this->nodeMap.find(nodeName);
 
 		Node *node=it->second;
 
@@ -228,7 +228,7 @@ bool Scheduler::topologicalSort()
 	//Check to see if all edges are removed
 	bool cycle = false;
 
-	for (std::map<std::string, Node*>::iterator it=this->nodeMap.begin(); it!=this->nodeMap.end(); ++it)
+	for (auto it=this->nodeMap.begin(); it!=this->nodeMap.end(); ++it)
 	{
 		Node * node = it->second;
 		if (!node->inEdges.empty())
