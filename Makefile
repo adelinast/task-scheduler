@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -g -O2 -Wall
 TEST_INCLUDES = -I./gtest-1.7.0/include
-TEST_LINK_FLAGS = -L./gtest-1.7.0/mybuild
+TEST_LINK_FLAGS = -L./gtest-1.7.0/build
 TEST_LINK_LIBS = -lgtest -lgtest_main -lpthread
 
 all:
