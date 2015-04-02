@@ -51,7 +51,7 @@ class Scheduler {
 		 * @brief Get node map
 		 * @return node map
 		 */
-		std::unordered_map<std::string, Node*> getNodeMap();
+		std::map<std::string, Node*> getNodeMap();
 
 	
 		/**
@@ -100,7 +100,7 @@ class Scheduler {
 
 		int n;
 
-		std::unordered_map<std::string, Node*> nodeMap;
+		std::map<std::string, Node*> nodeMap;
 
 		std::queue<std::string> nodesNoDependency;
 

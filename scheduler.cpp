@@ -49,7 +49,7 @@ void extractDependencies(char *p, std::vector<std::string> &taskDependenciesList
 {
 	int count = 0;
 	
-	while (p != nullptr)
+	while (p != NULL)
 	{
 
 		if (count >= 1)
@@ -58,7 +58,7 @@ void extractDependencies(char *p, std::vector<std::string> &taskDependenciesList
 			taskDependenciesList.push_back(str);
 
 		}
-		p = strtok(nullptr, " \n");
+		p = strtok(NULL, " \n");
 
 		count++;
 	}
@@ -273,7 +273,7 @@ std::map<std::string, Node*> Scheduler::getSortedList()
 	return sortednodeMap;
 }
 
-std::unordered_map<std::string, Node*> Scheduler::getNodeMap()
+std::map<std::string, Node*> Scheduler::getNodeMap()
 {
 	return nodeMap;
 }
