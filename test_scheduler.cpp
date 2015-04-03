@@ -33,7 +33,7 @@ TEST(Scheduler, readFile)
 
 	std::map<std::string, Node*> nodeMap = scheduler.getNodeMap();
 
-	for (std::map<std::string, Node*>::iterator it=nodeMap.begin(); it!=nodeMap.end(); ++it)
+	for (std::map<std::string, Node*>::const_iterator it=nodeMap.begin(); it!=nodeMap.end(); ++it)
 	{
 		switch(count)
 		{
@@ -84,13 +84,13 @@ TEST(Scheduler, buildGraph)
 
 	std::map<std::string, Node*> nodeMap = scheduler.getNodeMap();
 
-	for (std::map<std::string, Node*>::iterator it=nodeMap.begin(); it!=nodeMap.end(); ++it)
+	for (std::map<std::string, Node*>::const_iterator it=nodeMap.begin(); it!=nodeMap.end(); ++it)
 	{
 		Node *node = (Node*)it->second;
 		
 		if (node->getName().compare("task1"))
 		{
-			for (std::list<Edge*>::iterator it=node->inEdges.begin(); it!=node->inEdges.end(); ++it)
+			for (std::list<Edge*>::const_iterator it=node->inEdges.begin(); it!=node->inEdges.end(); ++it)
 			{
 				Edge *edge = (Edge*)*it;
 				ASSERT_EQ(edge, nullptr);
@@ -110,7 +110,7 @@ TEST(Scheduler, buildGraph)
 		}
 		else if (node->getName().compare("task2"))
 		{
-			for (std::list<Edge*>::iterator it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
+			for (std::list<Edge*>::const_iterator it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
 			{
 				Edge *edge = (Edge*)*it;
 				ASSERT_EQ(edge, nullptr);
@@ -120,7 +120,7 @@ TEST(Scheduler, buildGraph)
 		}
 		else if (node->getName().compare("task3"))
 		{
-			for (std::list<Edge*>::iterator it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
+			for (std::list<Edge*>::const_iterator it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
 			{
 				Edge *edge = (Edge*)*it;
 				ASSERT_EQ(edge, nullptr);
@@ -160,7 +160,7 @@ TEST(Scheduler, topologicalSort)
 
 	std::map<std::string, Node*> sortedList = scheduler.getSortedList();
 
-	for (std::map<std::string, Node*>::iterator it=sortedList.begin(); it!=sortedList.end(); ++it)
+	for (std::map<std::string, Node*>::const_iterator it=sortedList.begin(); it!=sortedList.end(); ++it)
 	{
 		switch (count)
 		{
