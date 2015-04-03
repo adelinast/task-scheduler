@@ -255,10 +255,10 @@ void Scheduler::searchDependencyNode(Node *node, std::string nodeName)
 
 void Scheduler::buildGraph()
 {
-	for (std::map<std::string, Node*>::iterator it=this->nodeMap.begin(); it!=this->nodeMap.end(); ++it)
+	for (auto it=this->nodeMap.begin(); it!=this->nodeMap.end(); ++it)
 	{
         Node *node = (Node*)it->second;
-		std::vector<std::string> nodeDependencies = node->getDependencies();
+		auto nodeDependencies = node->getDependencies();
 		int nodeDependencyListSize = nodeDependencies.size();
 		
 		for (int i = 0; i < nodeDependencyListSize ; i++)
