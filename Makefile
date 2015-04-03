@@ -14,7 +14,14 @@ all:
 test:
 	$(CXX) $(TEST_INCLUDES) $(TEST_LINK_FLAGS) test_scheduler.cpp -o test $(TEST_LINK_LIBS) scheduler.o node.o -std=c++11
 
+auxiliar:
+	$(CXX) $(CXXFLAGS) -o test_regex test_regex.cpp -std=c++11
+	$(CXX) $(CXXFLAGS) -o test_tostring test_tostring.cpp -std=c++11
+	$(CXX) $(CXXFLAGS) -o test_tie test_tie.cpp -std=c++11
+	$(CXX) $(CXXFLAGS) -o test_it test_iterator.cpp -std=c++11
+
 clean:
 	if [ -f "*.o" ]; then rm -f *.o;fi
 	if [ -e main ]; then rm -f main; fi;
 	if [ -e test ]; then rm -f test; fi;
+	if [ -e test.out ]; then rm -f test.out; fi;
