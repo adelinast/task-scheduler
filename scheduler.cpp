@@ -28,9 +28,9 @@ Scheduler::Scheduler(FILE* inputFile):inputFile(inputFile)
 
 Scheduler::~Scheduler()
 {
-	for (std::map<std::string, Node*>::iterator it=nodeMap.begin(); it!=nodeMap.end(); ++it)
+	for (auto &entry : nodeMap)
 	{
-		Node * node = it->second;
+		Node * node = entry.second;
 		delete node;
 	}
 }
