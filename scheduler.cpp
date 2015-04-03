@@ -296,7 +296,7 @@ int Scheduler::getTotalDistanceFromNode(std::map<Node*, int> *distance, Node *so
 	int maxDistance = 0;
 	int totalDistanceSourceNode = 0;
 
-    for (std::list<Edge*>::iterator it = sourceNode->outEdges.begin() ; it != sourceNode->outEdges.end(); ++it)
+    for (std::list<Edge*>::iterator it = begin(sourceNode->outEdges) ; it != end(sourceNode->outEdges); ++it)
 	{
 		Edge* edge = *it;
 		Node *nodeNeighBour = edge->to;
