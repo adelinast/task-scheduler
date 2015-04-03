@@ -49,7 +49,7 @@ void extractDependencies(char *p, std::vector<std::string> &taskDependenciesList
 {
 	int count = 0;
 	
-	while (p != NULL)
+	while (p != nullptr)
 	{
 
 		if (count >= 1)
@@ -58,7 +58,7 @@ void extractDependencies(char *p, std::vector<std::string> &taskDependenciesList
 			taskDependenciesList.push_back(str);
 		}
 
-		p = strtok(NULL, " \n");
+		p = strtok(nullptr, " \n");
 
 		count++;
 	}
@@ -69,7 +69,7 @@ int extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime, s
 	int rc = 0;
 	char *p = strtok(buf, " ");
 
-	if (p != NULL)
+	if (p != nullptr)
 	{
 		taskName.assign(p, strlen(p));
 	}
@@ -81,8 +81,8 @@ int extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime, s
 
 	if (rc == 0)
 	{
-		p = strtok(NULL, " ");
-		if (p != NULL)
+		p = strtok(nullptr, " ");
+		if (p != nullptr)
 		{
 			*taskExecutionTime = atoi(p);
 		}
@@ -95,8 +95,8 @@ int extractTaskInfo(char * buf, std::string &taskName, int *taskExecutionTime, s
 
 	if (rc == 0)
 	{
-		p = strtok(NULL, " ");
-		if (p != NULL)
+		p = strtok(nullptr, " ");
+		if (p != nullptr)
 		{
 			*taskDepNumber = atoi(p);
 		}
@@ -149,7 +149,7 @@ int Scheduler::readFile()
 		char buf[lineMax] = {0};
 		line++;
 
-		if (fgets(buf, sizeof buf, this->inputFile) == NULL)
+		if (fgets(buf, sizeof buf, this->inputFile) == nullptr)
 		{
 			break;
 		}
