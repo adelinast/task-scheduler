@@ -255,15 +255,13 @@ void Scheduler::searchDependencyNode(Node *node, std::string nodeName)
 
 void Scheduler::buildGraph()
 {
-	for (auto it=this->nodeMap.begin(); it!=this->nodeMap.end(); ++it)
+	for (auto &entry : nodeMap)
 	{
-        Node *node = (Node*)it->second;
+        Node *node = (Node*)entry.second;
 		auto nodeDependencies = node->getDependencies();
-		int nodeDependencyListSize = nodeDependencies.size();
 		
-		for (int i = 0; i < nodeDependencyListSize ; i++)
+		for (auto currentNodeDependency: nodeDependencies)
 		{
-			std::string currentNodeDependency = nodeDependencies[i];
 			searchDependencyNode(node, currentNodeDependency);
 		}
 	}
