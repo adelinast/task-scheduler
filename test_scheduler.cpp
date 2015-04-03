@@ -90,9 +90,9 @@ TEST(Scheduler, buildGraph)
 		
 		if (node->getName().compare("task1"))
 		{
-			for (std::list<Edge*>::const_iterator it=node->inEdges.begin(); it!=node->inEdges.end(); ++it)
+			for (std::list<shared_ptr<Edge>>::const_iterator it=node->inEdges.begin(); it!=node->inEdges.end(); ++it)
 			{
-				Edge *edge = (Edge*)*it;
+				shared_ptr<Edge> edge = (shared_ptr<Edge>)*it;
 				ASSERT_EQ(edge, nullptr);
 				switch(count)
 				{
@@ -110,9 +110,9 @@ TEST(Scheduler, buildGraph)
 		}
 		else if (node->getName().compare("task2"))
 		{
-			for (std::list<Edge*>::const_iterator it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
+			for (std::list<shared_ptr<Edge>>::const_iterator it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
 			{
-				Edge *edge = (Edge*)*it;
+				shared_ptr<Edge> edge = (shared_ptr<Edge>)*it;
 				ASSERT_EQ(edge, nullptr);
 				EXPECT_STREQ(edge->from->getName().c_str(), "task2");
 				EXPECT_STREQ(edge->to->getName().c_str(), "task1");
@@ -120,9 +120,9 @@ TEST(Scheduler, buildGraph)
 		}
 		else if (node->getName().compare("task3"))
 		{
-			for (std::list<Edge*>::const_iterator it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
+			for (std::list<shared_ptr<Edge>>::const_iterator it=node->outEdges.begin(); it!=node->outEdges.end(); ++it)
 			{
-				Edge *edge = (Edge*)*it;
+				shared_ptr<Edge> edge = (shared_ptr<Edge>)*it;
 				ASSERT_EQ(edge, nullptr);
 				EXPECT_STREQ(edge->from->getName().c_str(), "task3");
 				EXPECT_STREQ(edge->to->getName().c_str(), "task1");

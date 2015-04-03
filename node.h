@@ -24,8 +24,8 @@ private:
 	std::vector<std::string> taskDependenciesList;
 
 public:
-	std::list<Edge*> inEdges;
-	std::list<Edge*> outEdges;
+	std::list<shared_ptr<Edge>> inEdges;
+	std::list<shared_ptr<Edge>> outEdges;
 
 	Node();
 

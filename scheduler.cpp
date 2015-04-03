@@ -191,7 +191,7 @@ void topSortUtil(Node *node, std::queue<std::string> *nodesNoDependency)
 	while (it != node->outEdges.end())
 	{
 		// remove edge e from the graph
-		Edge *e = (Edge*)*it;
+		shared_ptr<Edge> e = (shared_ptr<Edge>)*it;
 		Node *m = e->to;
 
 		// remove edge from node
@@ -296,9 +296,9 @@ int Scheduler::getTotalDistanceFromNode(std::map<Node*, int> *distance, Node *so
 	int maxDistance = 0;
 	int totalDistanceSourceNode = 0;
 
-    for (std::list<Edge*>::iterator it = begin(sourceNode->outEdges) ; it != end(sourceNode->outEdges); ++it)
+    for (std::list<shared_ptr<Edge>>::iterator it = begin(sourceNode->outEdges) ; it != end(sourceNode->outEdges); ++it)
 	{
-		Edge* edge = *it;
+    	shared_ptr<Edge> edge = *it;
 		Node *nodeNeighBour = edge->to;
 		int distanceNodeNeighBour = getCorrespondingDistance(*distance, nodeNeighBour);
 

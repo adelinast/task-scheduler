@@ -18,8 +18,7 @@ Node::~Node()
 
 Node* Node::addEdge(Node *node)
 {
-	Edge *edge = new Edge(this, node);
-
+	shared_ptr<Edge> edge = make_shared<Edge>(this, node);
 	this->outEdges.push_back(edge);
 	node->inEdges.push_back(edge);
 
