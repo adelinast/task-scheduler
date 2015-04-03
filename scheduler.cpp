@@ -312,7 +312,7 @@ int Scheduler::getTotalDistanceFromNode(std::map<Node*, int> *distance, Node *so
 
 	totalDistanceSourceNode = maxDistance + sourceNode->getExecutionTime();
 
-	(*distance)[sourceNode] = totalDistanceSourceNode;
+	(*distance).at(sourceNode) = totalDistanceSourceNode;
 
 	return totalDistanceSourceNode;
 }
