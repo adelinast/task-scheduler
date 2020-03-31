@@ -24,11 +24,13 @@ private:
 	std::vector<std::string> taskDependenciesList;
 
 public:
-	std::list<shared_ptr<Edge>> inEdges;
-	std::list<shared_ptr<Edge>> outEdges;
+	std::list<Edge*> inEdges;
+	std::list<Edge*> outEdges;
 
 	Node();
+
 	Node(std::string name, int taskExecuteTime, std::vector<std::string> taskDependenciesList);
+
 	~Node();
 
 	Node* addEdge(Node *node);

@@ -40,5 +40,7 @@ int main(int argc, char** argv)
 		printf("time %d\n", time);
 	}
 
+	fclose(fin);
+
 	return rc;
 }
